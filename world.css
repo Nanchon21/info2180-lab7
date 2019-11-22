@@ -1,1 +1,63 @@
-/* Add your own styles */
+
+body{
+    display: grid;
+    grid-template-columns: 1fr 460px 460px 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+    ". header header ."
+    ". main main .";
+    text-align: center;
+}
+
+header{
+    grid-area: header;
+    justify-content: center;
+    align-items: center;
+    background-color:  AliceBlue;
+    color: red;
+    padding-top: 50px;
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-bottom: 50px;
+}
+
+#photo{
+    float: left;
+}
+
+main{
+    grid-area: main;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    margin: auto;
+    border-radius: 4px;
+    width: 85%;
+    height: auto;
+    align-content: center;
+    border-bottom: 1px solid #e9e8ed;
+}
+#country{
+    width: 85%;
+    height: 30px;
+}
+#lookup{
+    height: 30px;
+}
+#controls{
+    padding-bottom: 50px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family:"Times New Roman", Times, serif;
+}
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+tr:nth-child(even){background-color: #f2f2f2}
+th {
+  background-color: AliceBlue;
+  color: Red;
+}
