@@ -1,37 +1,48 @@
-window.onload = function() {
-    var httpRequest;
-    var lookupButton = document.getElementById("lookup");
-    var cityLookUpButton = document.getElementById("city");
-    lookupButton.onclick = lookupCountry;
-    cityLookUpButton.onclick = lookupCity;
-    function lookupCountry() {
-        event.preventDefault();
-        httpRequest = new XMLHttpRequest();
-        var userInput = document.getElementById("country").value;
-        var url = "world.php" + "?country=" + userInput;
-        httpRequest.onreadystatechange = getResults;
-        httpRequest.open('GET', url);
-        httpRequest.send();
+document.addEventListener('DOMContentLoaded', (event) => {
+    const input = document.getElementById('country');
+    const SearchField = document.getElementById('lookup');
+    const citiesBtn = document.getElementById('lookup-cities')
+    
+    if (SearchField && input) {
+        SearchField.onclick = () => { handleSearch(input, false); }
     }
-    function lookupCity() {
-        event.preventDefault();
-        httpRequest = new XMLHttpRequest();
-        var userInput = document.getElementById("country").value;
-        var url = "world.php" + "?country=" + userInput + "&context=cities";
-
-        httpRequest.onreadystatechange = getResults;
-        httpRequest.open('GET', url);
-        httpRequest.send();
-    }
-    function getResults() {
-        if(httpRequest.readyState === XMLHttpRequest.DONE) {
-          if(httpRequest.status === 200) {
-            var response = httpRequest.responseText;
-            var resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = response;
-          } else {
-            alert("Something went wrong with the request! Request Status = " + httpRequest.status);
-          }
+    
+    if (citiesBtn && input) {
+        citiesBtn.onclick = () => {
+            handleSearch(input, true)
         }
-      }
+    }
+});
+
+function handleSearch(inputVal, city) {
+    const searchValue = inputVal.value.trim();
+    searchValue.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');     
+    getCountryResult(searchValue, city);   
+ }
+
+function getCountryResult(searchValue, city) {
+    let httpRequest = new XMLHttpRequest();
+    let params = city === true? ("country=" + searchValue + "&context=cities") : ("country=" + searchValue);
+    httpRequest.open("GET", "world.php?"+ params);
+
+    httpRequest.onreadystatechange = function () {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) { 
+                console.log(httpRequest.responseText);       
+                displaySearchResult(httpRequest.responseText);            
+            } else {
+                console.log(httpRequest.responseText);  
+                displaySearchResult("There was a problem conducting the search. Please try again later."); 
+            }
+        }
+    }
+    httpRequest.send();
+}
+function displaySearchResult(stringValue) {
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "";
+    const div = document.createElement('div');
+    div.setAttribute("class", "result-content");
+    div.innerHTML = stringValue;
+    resultDiv.append(div);
 }
